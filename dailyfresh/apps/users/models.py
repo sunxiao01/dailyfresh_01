@@ -13,11 +13,11 @@ class User(AbstractUser, BaseModel):
     class Meta:
         db_table = "df_users"
 
-    # def generate_active_token(self):
-    #     """生成激活令牌"""
-    #     serializer = Serializer(settings.SECRET_KEY, 3600)
-    #     token = serializer.dumps({"confirm": self.id})  # 返回bytes类型
-    #     return token.decode()
+    def generate_active_token(self):
+        """生成token"""
+        s = Serializer(settings.SECRET_KEY, 3600)
+        token = s.dumps({"confirm":self.id})
+        return token.decode()
 
 
 class Address(BaseModel):

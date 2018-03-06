@@ -12,7 +12,7 @@
 <body>
 	<div class="register_con">
 		<div class="l_con fl">
-			<a class="reg_logo"><img src="{% static 'images/logo02.png' %}"></a>
+			<a href="{% url 'goods:index' %}" class="reg_logo"><img src="{% static 'images/logo02.png' %}"></a>
 			<div class="reg_slogan">足不出户  ·  新鲜每一天</div>
 			<div class="reg_banner"></div>
 		</div>
@@ -20,7 +20,7 @@
 		<div class="r_con fr">
 			<div class="reg_title clearfix">
 				<h1>用户注册</h1>
-				<a href="#">登录</a>
+				<a href="{% url 'users:login' %}">登录</a>
 			</div>
 			<div class="reg_form clearfix">
 				<form method="post">
@@ -47,10 +47,11 @@
 						<span class="error_tip">提示信息</span>
 					</li>
 					<li class="agreement">
-						<input type="checkbox" name="allow" id="allow" checked="checked">
+						<input type="checkbox" name="allow" id="allow">
 						<label>同意”天天生鲜用户使用协议“</label>
 						<span class="error_tip2">提示信息</span>
 					</li>
+                    <div style="color: red">{{ errmsg }}</div>
 					<li class="reg_sub">
 						<input type="submit" value="注 册" name="">
 					</li>

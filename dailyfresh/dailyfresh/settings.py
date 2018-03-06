@@ -39,6 +39,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tinymce',
+    'haystack',
     'cart',
     'goods',
     'orders',
@@ -95,9 +97,9 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-Hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -115,3 +117,52 @@ STATICFILES_DIRS = [
 ]
 
 AUTH_USER_MODEL = 'users.User'
+# 配置django的第三方邮件服务器
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' # 导入邮件模块
+EMAIL_HOST = 'smtp.yeah.net' # 发邮件主机
+EMAIL_PORT = 25 # 发邮件端口
+EMAIL_HOST_USER = 'dailyfreshzxc@yeah.net' # 授权的邮箱
+EMAIL_HOST_PASSWORD = 'dailyfresh123' # 邮箱授权时获得的密码，非注册登录密码
+EMAIL_FROM = '天天生鲜<dailyfreshzxc@yeah.net>' # 发件人抬头
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://192.168.102.128:6379/5",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+}
+
+
+# Session
+# http://django-redis-chs.readthedocs.io/zh_CN/latest/#session-backend
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+# 搭配login_required使用的
+LOGIN_URL = '/users/login'
+
+DEFAULT_FILE_STORAGE = 'utils.fastdfs.storage.FastDFSStorage'
+
+CLIENT_CONF = os.path.join(BASE_DIR, 'utils/fastdfs/client.conf')
+
+SERVER_IP = 'http://192.168.102.128:8888/'
+
+TINYMCE_DEFAULT_CONFIG = {
+  'theme': 'advanced', # 丰富样式
+  'width': 600,
+  'height': 400,
+}
+
+HAYSTACK_CONNECTIONS = {
+  'default': {
+      # 使用whoosh引擎：提示，如果不需要使用jieba框架实现分词，就使用whoosh_backend
+      'ENGINE': 'haystack.backends.whoosh_cn_backend.WhooshEngine',
+      # 索引文件路径
+      'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+  }
+}
+# 当添加、修改、删除数据时，自动生成索引
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
