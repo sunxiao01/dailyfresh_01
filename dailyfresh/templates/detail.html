@@ -30,37 +30,41 @@
     <div class="goods_detail_con clearfix">
         <div class="goods_detail_pic fl"><img src="{{ sku.default_image.url }}"></div>
 
-        <div class="goods_detail_list fr">
-            <h3>{{ sku.name}}</h3>
-            <p>{{ sku.title }}</p>
-            <div class="prize_bar">
-                <span class="show_pirze">¥<em>{{ sku.price }}</em></span>
-                <span class="show_unit">单  位：{{ sku.unit }}</span>
-            </div>
-            {% if other_skus %}
-            <div>
-                <p>其他规格:</p>
-                <ul>
-                    {% for sku in other_skus %}
-                        <li><a href="{% url 'goods:detail' sku.id %}">{{ sku.price }}/{{ sku.unit }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
-            <div class="goods_num clearfix">
-                <div class="num_name fl">数 量：</div>
-                <div class="num_add fl">
-                    <input type="text" class="num_show fl" id="num_show" value="1">
-                    <a href="javascript:;" class="add fr" id="add">+</a>
-                    <a href="javascript:;" class="minus fr" id="minus">-</a>
+        <form method="post" action="{% url 'orders:placeorder' %}">
+            {% csrf_token %}
+            <div class="goods_detail_list fr">
+                <h3>{{ sku.name}}</h3>
+                <p>{{ sku.title }}</p>
+                <input type="hidden" name="sku_ids" value="{{ sku.id }}">
+                <div class="prize_bar">
+                    <span class="show_pirze">¥<em>{{ sku.price }}</em></span>
+                    <span class="show_unit">单  位：{{ sku.unit }}</span>
+                </div>
+                {% if other_skus %}
+                <div>
+                    <p>其他规格:</p>
+                    <ul>
+                        {% for sku in other_skus %}
+                            <li><a href="{% url 'goods:detail' sku.id %}">{{ sku.price }}/{{ sku.unit }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                <div class="goods_num clearfix">
+                    <div class="num_name fl">数 量：</div>
+                    <div class="num_add fl">
+                        <input type="text" class="num_show fl" id="num_show" name="count" value="1">
+                        <a href="javascript:;" class="add fr" id="add">+</a>
+                        <a href="javascript:;" class="minus fr" id="minus">-</a>
+                    </div>
+                </div>
+                <div class="total">总价：<em>{{ sku.price }}</em>元</div>
+                <div class="operate_btn">
+                    <input type="submit" class="buy_btn" id="buy_btn" value="立即购买">
+                    <a href="javascript:;" class="add_cart" sku_id="{{ sku.id }}" id="add_cart">加入购物车</a>
                 </div>
             </div>
-            <div class="total">总价：<em>{{ sku.price }}</em>元</div>
-            <div class="operate_btn">
-                <a href="javascript:;" class="buy_btn" id="buy_btn">立即购买</a>
-                <a href="javascript:;" class="add_cart" sku_id="{{ sku.id }}" id="add_cart">加入购物车</a>
-            </div>
-        </div>
+        </form>
     </div>
 
     <div class="main_wrap clearfix">

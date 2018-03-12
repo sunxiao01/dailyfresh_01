@@ -120,6 +120,7 @@ class LoginView(View):
             return render(request, 'login.html', {'errmsg': '用户名或密码错误'})
         if user.is_active == False:
             return render(request, 'login.html', {'errmsg': '请激活'})
+
         login(request, user)
 
         # 状态保持，如果用户勾选了记住用户名，则保持10天，否则，保持0秒
@@ -158,10 +159,16 @@ class LoginView(View):
 
         if next is None:
             """如果没有next,登陆后进入主页"""
-            return redirect(reverse('goods:index'))
+            response = redirect(reverse('goods:index'))
         else:
             """如果有next, 进入到next页面"""
-            return redirect(next)
+            if next == '/orders/placeorder':
+                response = redirect(reverse('cart:cartinfo'))
+            else:
+                response = redirect(next)
+
+        response.delete_cookie('cart')
+        return response
 
 
 # Create your views here.

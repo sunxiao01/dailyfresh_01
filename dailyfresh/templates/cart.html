@@ -28,7 +28,7 @@
 		<li class="col05">小计</li>
 		<li class="col06">操作</li>
 	</ul>
-    <form method="post" action="#">
+    <form method="post" action="{% url 'orders:placeorder' %}">
     {% csrf_token %}
     {% for sku in skus %}
         <ul class="cart_list_td clearfix" sku_id="{{ sku.id }}">
